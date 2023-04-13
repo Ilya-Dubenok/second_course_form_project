@@ -1,12 +1,15 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="by.itacademy.servletproject.business.VoteProcessor"%>
+<%@page import="java.util.*"%>
+<%@page import="by.itacademy.servletproject.dto.IDTO"%>
 
 <%
 
-String [] players = (String[])request.getAttribute("players");
-String [] genres = (String[])request.getAttribute("genres");
+List<IDTO> playersList = (List<IDTO>)request.getAttribute("playersList");
+List<IDTO> genresList = (List<IDTO>)request.getAttribute("genresList");
 
 %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
@@ -20,10 +23,10 @@ String [] genres = (String[])request.getAttribute("genres");
 
             <p>ВЫБЕРИ ЛЮБИМОГО ИСПОЛНИТЕЛЯ </p>
             <%
-                for(int i = 0; i < players.length; i++)
+                for(int i = 0; i < playersList.size(); i++)
                 {
                 %>
-                <input type="radio" name="player" value=<%= players[i]%>><%=players[i]%>
+                <input type="radio" name="player" value=<%= playersList.get(i).getId()%>><%=playersList.get(i).getName()%>
                 <%
                 }
             %>
@@ -32,10 +35,10 @@ String [] genres = (String[])request.getAttribute("genres");
             <p>ВЫБЕРИ ОТ 3 ДО 5 ЖАНРОВ</p>
 
             <%
-                        for(int i = 0; i < genres.length; i++)
+                        for(int i = 0; i < genresList.size(); i++)
                         {
                         %>
-                        <input type="checkbox" name="genre" value=<%= genres[i]%>><%=genres[i]%>
+                        <input type="checkbox" name="genre" value=<%= genresList.get(i).getId()%>><%=genresList.get(i).getName()%>
                         <%
                         }
             %>

@@ -1,5 +1,7 @@
 package by.itacademy.servletproject.web;
 
+import by.itacademy.servletproject.business.VoteProcessor;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,32 +10,18 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
+
 
 
 @WebServlet(name = "FormServlet", urlPatterns = "/formserv")
 public class FormServlet extends HttpServlet {
 
-    private String[] players = {"Updated", "Metallica", "Tarja", "AC_DC"};
-    private String[] genres = {"Rock", "HardRock", "Metal", "POP", "RNB", "Blues", "Rap", "Classic", "Country", "Jazz"};
+    private VoteProcessor voteProcessor;
 
-    private Map<String, Integer> playersVotes = new HashMap<>();
-    private Map<String, Integer> genreVotes = new HashMap<>();
-    private Map<LocalDateTime, String> descriptions = new HashMap<>();
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
-    {
-        for (String player : players) {
-            playersVotes.put(player, 0);
-        }
-
-        for (String genre : genres) {
-            genreVotes.put(genre, 0);
-        }
+    public FormServlet() {
+        voteProcessor = new VoteProcessor();
     }
 
 
@@ -41,8 +29,8 @@ public class FormServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
-        req.setAttribute("players", players);
-        req.setAttribute("genres", genres);
+        req.setAttribute("playersList", voteProcessor.getPlayers());
+        req.setAttribute("genresList", voteProcessor.getGenres());
         getServletContext().getRequestDispatcher("/form.jsp").forward(req, resp);
 
     }
@@ -68,34 +56,32 @@ public class FormServlet extends HttpServlet {
 
     private void printVotes(PrintWriter writer) {
 
-        writer.write("Рейтинг голосов:");
+        writer.write("Рейтинг исполнителей:");
+        voteProcessor.getVotesForPlayersSorted().forEach(
+                (K,V)->writer.write("<br>" +K.getName() + " -> " + V)
+        );
 
-        playersVotes.entrySet().stream().sorted((o1, o2) -> o2.getValue() - o1.getValue()).forEach(
-                E -> writer.write("<br>" + E.getKey() + " -> " + E.getValue()));
 
         writer.write("<br><br> Рейтинг жанров:");
 
-        genreVotes.entrySet().stream().sorted((o1, o2) -> o2.getValue() - o1.getValue()).forEach(
-                E -> writer.write("<br>" + E.getKey() + " -> " + E.getValue()));
+        voteProcessor.getVotesForGenresSorted().forEach(
+                (K,V)->writer.write("<br>" +K.getName() + " -> " + V)
+        );
 
         writer.write("<br><br> Описания с датой и временем поста:");
 
-        descriptions.entrySet().stream().sorted((o1, o2) -> o2.getKey().compareTo(o1.getKey())).forEach(
-                E -> writer.write("<br>" + E.getValue() + " -> " + E.getKey().format(formatter)));
+        voteProcessor.getDescriptionsSorted().forEach(
+                (K,V)->writer.write("<br>" + V + " -> " + K)
+        );
 
 
     }
 
     private void putAllData(String[] votesForGenre, String[] votesForPlayers, String description) {
-        for (String vote : votesForGenre) {
-            genreVotes.compute(vote,(k1,v1)-> v1==null? 0: v1+1);
-        }
-        for (String vote : votesForPlayers) {
-            playersVotes.put(vote, playersVotes.get(vote) + 1);
-        }
 
-        descriptions.put(LocalDateTime.now(), description);
-
+            voteProcessor.incrementVotesForGenres(votesForGenre);
+            voteProcessor.incrementVotesForPlayers(votesForPlayers);
+            voteProcessor.putDescription(description);
     }
 
     private boolean mistakeInSomething(String[] votesForPlayers, String[] votesForGenre, String description, PrintWriter writer) {
