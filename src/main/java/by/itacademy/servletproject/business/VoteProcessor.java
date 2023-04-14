@@ -26,8 +26,9 @@ public class VoteProcessor {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
     public VoteProcessor() {
-        formPlayers("Mozart", "Metallica", "Tarja", "AC_DC");
-        formGenres("Rock", "HardRock", "Metal", "POP", "RNB", "Blues", "Rap", "Classic", "Country", "Jazz");
+        formPlayers(List.of("Mozart", "Metallica", "Tarja", "AC_DC"));
+        formGenres(List.of("Rock", "Pop", "Metal", "Classic",
+                "Grange", "RNB", "Rap", "Jazz", "Bluez", "Folk"));
 
     }
 
@@ -140,10 +141,10 @@ public class VoteProcessor {
     }
 
 
-    private void formPlayers(String... namesArray) {
+    private void formPlayers(List<String> namesList) {
 
-        for (int i = 0; i < namesArray.length; i++) {
-            PlayerDTO playerDTO = new PlayerDTO(i, namesArray[i]);
+        for (int i = 0; i < namesList.size(); i++) {
+            PlayerDTO playerDTO = new PlayerDTO(i, namesList.get(i));
             players.add(playerDTO);
             votesForPlayers.put(playerDTO, 0);
         }
@@ -151,9 +152,9 @@ public class VoteProcessor {
     }
 
 
-    private void formGenres(String... genresArray) {
-        for (int i = 0; i < genresArray.length; i++) {
-            GenreDTO genreDTO = new GenreDTO(i, genresArray[i]);
+    private void formGenres(List<String> genresList) {
+        for (int i = 0; i < genresList.size(); i++) {
+            GenreDTO genreDTO = new GenreDTO(i, genresList.get(i));
             genres.add(genreDTO);
             votesForGenres.put(genreDTO, 0);
         }
