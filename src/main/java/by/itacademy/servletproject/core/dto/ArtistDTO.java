@@ -1,15 +1,15 @@
-package by.itacademy.servletproject.dto;
+package by.itacademy.servletproject.core.dto;
 
-public class PlayerDTO implements IDTO{
+public class ArtistDTO implements IDTO{
 
 
     private int id;
     private String name;
 
-    public PlayerDTO() {
+    public ArtistDTO() {
     }
 
-    public PlayerDTO(int id, String name) {
+    public ArtistDTO(int id, String name) {
         this.id = id;
         this.name = name;
     }

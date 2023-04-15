@@ -1,4 +1,4 @@
-package by.itacademy.servletproject.dto;
+package by.itacademy.servletproject.core.dto;
 
 public class GenreDTO implements IDTO{
 
