@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GenreMemoryDao implements IGenreDao {
 
-    private final Map<Integer, GenreDTO> genres = new HashMap<>();
+    private final Map<Integer, GenreDTO> genres = new ConcurrentHashMap<>();
     //TODO TO DELETE
-    private final Map<Integer, Integer> genreVotes = new HashMap<>();
+    private final Map<Integer, Integer> genreVotes = new ConcurrentHashMap<>();
 
     private static GenreMemoryDao instance;
 
@@ -23,7 +24,7 @@ public class GenreMemoryDao implements IGenreDao {
         return instance;
     }
 
-    private GenreMemoryDao() {
+    public GenreMemoryDao() {
 
         {
             GenreDTO dto = new GenreDTO(1, "Hip-hop");

@@ -8,24 +8,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ArtistMemoryDao implements IArtistDao {
 
 
-    private final Map<Integer, ArtistDTO> artists = new HashMap<>();
+    private final Map<Integer, ArtistDTO> artists = new ConcurrentHashMap<>();
     //TODO TO DELETE
-    private final Map<Integer, Integer> artistVotes = new HashMap<>();
+    private final Map<Integer, Integer> artistVotes = new ConcurrentHashMap<>();
 
-    private static ArtistMemoryDao instance;
+    private static volatile ArtistMemoryDao instance;
 
     public static ArtistMemoryDao getInstance() {
-        if (instance == null) {
-            instance = new ArtistMemoryDao();
-        }
+        if (instance == null)
+            synchronized (ArtistMemoryDao.class) {
+
+                if (instance == null) {
+                    instance = new ArtistMemoryDao();
+                }
+            }
         return instance;
     }
 
-    private ArtistMemoryDao() {
+    public ArtistMemoryDao() {
 
         {
             ArtistDTO artistDTO = new ArtistDTO(1, "Леонтьев");
