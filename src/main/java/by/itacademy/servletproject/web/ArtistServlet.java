@@ -26,7 +26,7 @@ public class ArtistServlet extends HttpServlet {
     private final IArtistService artistService;
 
     public ArtistServlet() {
-        this.artistService = new ArtistService(new ArtistMemoryDao());
+        this.artistService = new ArtistService(ArtistMemoryDao.getInstance());
     }
 
     @Override
@@ -49,8 +49,12 @@ public class ArtistServlet extends HttpServlet {
         resp.setContentType("text/html; charset=UTF-8");
         String name = req.getParameter("name");
 
-        ArtistCreateDTO dto = new ArtistCreateDTO(name);
-        this.artistService.save(dto);
+        if (null != name) {
+
+            ArtistCreateDTO dto = new ArtistCreateDTO(name);
+            this.artistService.save(dto);
+        }
+
 
     }
 

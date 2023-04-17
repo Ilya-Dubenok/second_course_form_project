@@ -18,6 +18,7 @@ import by.itacademy.servletproject.core.dto.GenreDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +32,8 @@ public class FormServlet extends HttpServlet {
 
 
     public FormServlet() {
-        this.artistService = new ArtistService(new ArtistMemoryDao());
-        this.genreService = new GenreService(new GenreMemoryDao());
+        this.artistService = new ArtistService(ArtistMemoryDao.getInstance());
+        this.genreService = new GenreService(GenreMemoryDao.getInstance());
     }
 
     @Override
@@ -85,11 +86,35 @@ public class FormServlet extends HttpServlet {
 
         PrintWriter writer = resp.getWriter();
 
-        parameterMap.forEach((k, v) -> {
-            writer.write(k + ": [");
-            writer.write(String.join(", ", v));
-            writer.write("]</br>");
-        });
+
+        try {
+            Integer[] artistsIDs = Arrays.stream(parameterMap.get("artist")).map(Integer::parseInt).toArray(Integer[]::new);
+            Integer[] genresIDs = Arrays.stream(parameterMap.get("genre")).map(Integer::parseInt).toArray(Integer[]::new);
+            artistService.putVotes(artistsIDs);
+            genreService.putVotes(genresIDs);
+
+
+            Map<ArtistDTO, Integer> finalVotesForArtists = artistService.getSortedVotesInfo();
+            Map<GenreDTO, Integer> finalVotesForGenres = genreService.getSortedVotesInfo();
+
+            writer.write("<br> Рейтинг исполнителей: <br>");
+            finalVotesForArtists.forEach( (K,V)->
+                    writer.write(K.getName()+" -> "+V+" <br>")
+            );
+
+            writer.write("<br> Рейтинг жанров: <br>");
+            finalVotesForGenres.forEach( (K,V)->
+                    writer.write(K.getName()+" -> "+V+" <br>")
+            );
+
+        } catch (IllegalArgumentException e) {
+            writer.write(e.getMessage());
+        } catch (NullPointerException e) {
+            writer.write("Не задано ни одного результата");
+        }
+
+
+
     }
 }
 

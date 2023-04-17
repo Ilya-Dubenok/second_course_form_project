@@ -21,7 +21,7 @@ public class GenreServlet extends HttpServlet {
     private final IGenreService genreService;
 
     public GenreServlet() {
-        this.genreService = new GenreService(new GenreMemoryDao());
+        this.genreService = new GenreService(GenreMemoryDao.getInstance());
     }
 
     @Override
@@ -45,8 +45,11 @@ public class GenreServlet extends HttpServlet {
         resp.setContentType("text/html; charset=UTF-8");
         String name = req.getParameter("name");
 
-        GenreCreateDTO dto = new GenreCreateDTO(name);
-        this.genreService.save(dto);
+        if (null != name) {
+
+            GenreCreateDTO dto = new GenreCreateDTO(name);
+            this.genreService.save(dto);
+        }
 
     }
 }
