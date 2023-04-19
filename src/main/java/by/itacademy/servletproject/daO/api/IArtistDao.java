@@ -6,9 +6,8 @@ import java.util.Map;
 
 public interface IArtistDao extends ICRUDDao<ArtistDTO> {
 
-    //TODO TO DELETE
-    Map<Integer, Integer> getMapOfVotes();
 
-    void putNewVoices(Integer[] artistIDS);
+
+
 
 }

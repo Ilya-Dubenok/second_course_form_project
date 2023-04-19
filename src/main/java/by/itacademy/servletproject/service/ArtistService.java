@@ -26,18 +26,6 @@ public class ArtistService implements IArtistService {
     }
 
 
-    @Override
-    public String validate(Integer[] artistIDS) {
-        String res = "";
-        if (artistIDS.length > 1) {
-            res = res.concat("Слишком много артистов выбрано");
-        }
-        if (artistDao.get(artistIDS[0]) == null) {
-            res = res.concat("Нет артиста по такому id");
-        }
-        return res;
-
-    }
 
     @Override
     public ArtistDTO save(ArtistCreateDTO item) {
@@ -52,28 +40,4 @@ public class ArtistService implements IArtistService {
     }
 
 
-    @Override
-    public Map<ArtistDTO, Integer> getSortedVotesInfo() {
-        Map<ArtistDTO, Integer> res = new LinkedHashMap<>();
-        Map<Integer, Integer> votes = this.artistDao.getMapOfVotes();
-        votes.entrySet()
-                .stream()
-                .sorted(((o1, o2) -> o2.getValue() - o1.getValue()))
-                .forEach(
-                        x -> res.put(
-                                this.artistDao.get(x.getKey()),
-                                x.getValue())
-                );
-
-        return res;
-    }
-
-    @Override
-    public void putVotes(Integer[] artistIDS) throws IllegalArgumentException {
-        String validate = this.validate(artistIDS);
-        if (!validate.isBlank()) {
-            throw new IllegalArgumentException(validate);
-        }
-        this.artistDao.putNewVoices(artistIDS);
-    }
 }

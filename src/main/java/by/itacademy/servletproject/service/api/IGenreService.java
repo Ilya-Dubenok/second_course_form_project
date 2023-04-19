@@ -8,10 +8,6 @@ import java.util.Map;
 
 public interface IGenreService extends ICRUDService<GenreDTO, GenreCreateDTO> {
 
-    String validate (Integer[] genreIDS);
 
-    void putVotes(Integer[] genreIDS) throws IllegalArgumentException;
-
-    Map<GenreDTO, Integer> getSortedVotesInfo();
 
 }
