@@ -5,6 +5,7 @@ import by.itacademy.servletproject.core.dto.GenreDTO;
 import by.itacademy.servletproject.daO.memory.GenreMemoryDao;
 import by.itacademy.servletproject.service.GenreService;
 import by.itacademy.servletproject.service.api.IGenreService;
+import by.itacademy.servletproject.service.factory.GenreServiceFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,7 +22,7 @@ public class GenreServlet extends HttpServlet {
     private final IGenreService genreService;
 
     public GenreServlet() {
-        this.genreService = new GenreService(new GenreMemoryDao());
+        this.genreService = GenreServiceFactory.getInstance();
     }
 
     @Override

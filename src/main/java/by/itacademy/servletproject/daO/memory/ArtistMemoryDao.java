@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ArtistMemoryDao implements IArtistDao {
 
 
-    private final Map<Integer, ArtistDTO> artists = new HashMap<>();
+    private final Map<Integer, ArtistDTO> artists = new ConcurrentHashMap<>();
 
     public ArtistMemoryDao() {
 

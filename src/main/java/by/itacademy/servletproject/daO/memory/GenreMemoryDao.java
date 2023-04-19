@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GenreMemoryDao implements IGenreDao {
 
-    private final Map<Integer, GenreDTO> genres = new HashMap<>();
+    private final Map<Integer, GenreDTO> genres = new ConcurrentHashMap<>();
 
     public GenreMemoryDao() {
 

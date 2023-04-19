@@ -9,6 +9,7 @@ import by.itacademy.servletproject.daO.memory.GenreMemoryDao;
 import by.itacademy.servletproject.service.ArtistService;
 import by.itacademy.servletproject.service.GenreService;
 import by.itacademy.servletproject.service.api.IArtistService;
+import by.itacademy.servletproject.service.factory.ArtistServiceFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -26,7 +27,7 @@ public class ArtistServlet extends HttpServlet {
     private final IArtistService artistService;
 
     public ArtistServlet() {
-        this.artistService = new ArtistService(new ArtistMemoryDao());
+        this.artistService = ArtistServiceFactory.getInstance();
     }
 
     @Override
