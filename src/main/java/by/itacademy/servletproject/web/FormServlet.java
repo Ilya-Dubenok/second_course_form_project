@@ -4,8 +4,10 @@ import by.itacademy.servletproject.core.dto.VoteCreateDTO;
 
 import by.itacademy.servletproject.service.api.IArtistService;
 import by.itacademy.servletproject.service.api.IGenreService;
+import by.itacademy.servletproject.service.api.IVoteService;
 import by.itacademy.servletproject.service.factory.ArtistServiceFactory;
 import by.itacademy.servletproject.service.factory.GenreServiceFactory;
+import by.itacademy.servletproject.service.factory.VoteServiceFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,6 +19,8 @@ import by.itacademy.servletproject.core.dto.GenreDTO;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,15 +33,18 @@ public class FormServlet extends HttpServlet {
     private static final String ARTIST_PARAM_NAME = "artist";
     private static final String GENRE_PARAM_NAME = "genre";
     private static final String ABOUT_PARAM_NAME = "about";
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
 
     private final IGenreService genreService;
     private final IArtistService artistService;
+    private final IVoteService voteService;
 
 
     public FormServlet() {
         this.artistService = ArtistServiceFactory.getInstance();
         this.genreService = GenreServiceFactory.getInstance();
+        this.voteService = VoteServiceFactory.getInstance();
     }
 
     @Override
@@ -71,7 +78,7 @@ public class FormServlet extends HttpServlet {
         }
         writer.write("\t\t\t</label>\n" +
                 "\t\t\t<label>Информация\n" +
-                "\t\t\t\t<textarea name=\"" + ARTIST_PARAM_NAME + "\"></textarea>\n" +
+                "\t\t\t\t<textarea name=\"" + ABOUT_PARAM_NAME+ "\"></textarea>\n" +
                 "\t\t\t</label>\n" +
                 "\t\t\t<p><input type=\"submit\" value=\"Отправить\"></p>\n" +
                 "\t\t</form>\n" +
@@ -92,6 +99,9 @@ public class FormServlet extends HttpServlet {
 
         String[] artistsRaw = parameterMap.get(ARTIST_PARAM_NAME);
 
+        if (artistsRaw == null) {
+            throw new IllegalArgumentException("Не передано ни одного артиста");
+        }
         if (artistsRaw.length > 1) {
             throw new IllegalArgumentException("Слишком много артистов");
         }
@@ -104,6 +114,9 @@ public class FormServlet extends HttpServlet {
 
 
         String[] genresRaw = parameterMap.get(GENRE_PARAM_NAME);
+        if (genresRaw == null) {
+            throw new IllegalArgumentException("Не передано ни одного жанра");
+        }
 
         Integer[] genres = new Integer[genresRaw.length];
 
@@ -113,6 +126,7 @@ public class FormServlet extends HttpServlet {
 
 
         String[] aboutRaw = parameterMap.get(ABOUT_PARAM_NAME);
+
 
         if (aboutRaw.length > 1) {
             throw new IllegalArgumentException("Слишком много о себе");
@@ -125,6 +139,34 @@ public class FormServlet extends HttpServlet {
         }
 
         VoteCreateDTO dto = new VoteCreateDTO(artist, genres, about);
+        voteService.save(dto);
+
+        Map<ArtistDTO, Integer> artistVotes = voteService.getArtistsVotesMap();
+
+        artistVotes.forEach(
+                (K, V) ->
+                        writer.write("</br>"+K.getName() + " -> " + V)
+        );
+
+        writer.write("</br></br>");
+
+
+        Map<GenreDTO, Integer> genreVotes = voteService.getGenresVotesMap();
+
+        genreVotes.forEach(
+                (K, V) ->
+                        writer.write("</br>"+K.getName() + " -> " + V)
+        );
+
+        writer.write("</br></br>");
+
+        Map<LocalDateTime, String> aboutInfo = voteService.getAboutWithTimeMap();
+
+        aboutInfo.forEach(
+                (K, V) ->
+                        writer.write("</br>"+V + " -> " + K.format(formatter))
+
+        );
 
 
     }
