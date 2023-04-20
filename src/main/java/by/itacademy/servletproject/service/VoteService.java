@@ -10,12 +10,14 @@ import by.itacademy.servletproject.service.api.IVoteService;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class VoteService implements IVoteService {
 
-    private IArtistService artistService;
+    private final IArtistService artistService;
 
-    private IGenreService genreService;
+    private final IGenreService genreService;
 
     private final IVoteDao voteDao;
 
@@ -27,67 +29,48 @@ public class VoteService implements IVoteService {
     }
 
 
-    public Map<ArtistDTO,Integer> getArtistsVotesMap() {
+    public Map<ArtistDTO, Integer> getArtistsVotesMap() {
         List<ArtistDTO> artistDTOS = artistService.get();
-        Map<Integer, Integer> mapOfIDsAndVotes = new HashMap<>();
-        Map<Integer, ArtistDTO> mapOfIDsAndArtists = new HashMap<>();
-        for (ArtistDTO artistDTO : artistDTOS) {
-            mapOfIDsAndVotes.put(artistDTO.getId(), 0);
-            mapOfIDsAndArtists.put(artistDTO.getId(), artistDTO);
-        }
-
         List<VoteCreateDTO> voteCreateDTOS = voteDao.get();
-        for (VoteCreateDTO vote: voteCreateDTOS) {
-            mapOfIDsAndVotes.computeIfPresent(vote.getArtist(),
-                    (k, v) -> v + 1
-            );
-        }
+        Map<ArtistDTO, Integer> collect1 = artistDTOS.stream().collect(Collectors.toMap(
+                x -> x, x -> 0
+        ));
+
+        voteCreateDTOS.stream().map(VoteCreateDTO::getArtist).forEach(
+                x -> collect1.computeIfPresent(artistService.get(x), (K, V) -> V + 1)
+        );
+
+
         Map<ArtistDTO, Integer> res = new LinkedHashMap<>();
-
-        mapOfIDsAndVotes.entrySet()
-                .stream()
-                .sorted((o1, o2) -> o2.getValue() - o1.getValue())
-                .forEach(
-                        x -> {
-                            res.put(mapOfIDsAndArtists.get(x.getKey()),x.getValue());
-
-                        }
+        collect1.entrySet().stream().sorted(((o1, o2) -> o2.getValue().compareTo(o1.getValue())))
+                .forEach(x -> res.put(
+                        x.getKey(), x.getValue())
                 );
+
 
         return res;
 
     }
 
 
-    public Map<GenreDTO,Integer> getGenresVotesMap() {
-        List<GenreDTO> genreDTOS = genreService.get();
-        Map<Integer, Integer> mapOfIDsAndVotes = new HashMap<>();
-        Map<Integer, GenreDTO> mapOfIDsAndGenres = new HashMap<>();
-        for (GenreDTO genreDTO : genreDTOS) {
-            mapOfIDsAndVotes.put(genreDTO.getId(), 0);
-            mapOfIDsAndGenres.put(genreDTO.getId(), genreDTO);
-        }
+    public Map<GenreDTO, Integer> getGenresVotesMap() {
 
         List<VoteCreateDTO> voteCreateDTOS = voteDao.get();
-        for (VoteCreateDTO vote: voteCreateDTOS) {
-            for (Integer genre : vote.getGenres()) {
-                mapOfIDsAndVotes.computeIfPresent(genre,
-                        (k, v) -> v + 1
-                );
-            }
+        List<GenreDTO> genreDTOList = genreService.get();
+        Map<GenreDTO, Integer> collect1 = genreDTOList.stream().collect(Collectors.toMap(
+                x -> x, x -> 0
+        ));
+        voteCreateDTOS.stream().flatMap(x -> Arrays.stream(x.getGenres())).forEach(
+                x -> collect1.computeIfPresent(genreService.get(x), (K, V) -> V + 1)
+        );
 
-        }
+
         Map<GenreDTO, Integer> res = new LinkedHashMap<>();
-
-        mapOfIDsAndVotes.entrySet()
-                .stream()
-                .sorted((o1, o2) -> o2.getValue() - o1.getValue())
-                .forEach(
-                        x -> {
-                            res.put(mapOfIDsAndGenres.get(x.getKey()),x.getValue());
-
-                        }
+        collect1.entrySet().stream().sorted(((o1, o2) -> o2.getValue().compareTo(o1.getValue())))
+                .forEach(x -> res.put(
+                        x.getKey(), x.getValue())
                 );
+
 
         return res;
 
@@ -105,11 +88,10 @@ public class VoteService implements IVoteService {
                         (o1, o2) -> o2.getLocalDateTime().compareTo(o1.getLocalDateTime())
                 )
                 .forEach(
-                        x -> res.put(x.getLocalDateTime(),x.getAbout())
+                        x -> res.put(x.getLocalDateTime(), x.getAbout())
                 );
 
         return res;
-
 
 
     }
@@ -153,7 +135,6 @@ public class VoteService implements IVoteService {
         if (createDTO.getAbout().isBlank()) {
             throw new IllegalArgumentException("Не введено ничего в поле о себе");
         }
-
 
 
     }
