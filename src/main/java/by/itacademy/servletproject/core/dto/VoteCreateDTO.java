@@ -1,6 +1,6 @@
 package by.itacademy.servletproject.core.dto;
 
-import java.time.LocalDateTime;
+
 
 public class VoteCreateDTO {
 
@@ -10,14 +10,13 @@ public class VoteCreateDTO {
 
     private final String about;
 
-    private final LocalDateTime localDateTime;
 
 
     public VoteCreateDTO(Integer artist, Integer[] genres, String about) {
         this.artist = artist;
         this.genres = genres;
         this.about = about;
-        this.localDateTime = LocalDateTime.now();
+
     }
 
 
@@ -33,7 +32,5 @@ public class VoteCreateDTO {
         return about;
     }
 
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
-    }
+
 }

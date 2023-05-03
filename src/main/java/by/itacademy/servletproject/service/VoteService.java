@@ -3,14 +3,11 @@ package by.itacademy.servletproject.service;
 import by.itacademy.servletproject.core.dto.ArtistDTO;
 import by.itacademy.servletproject.core.dto.GenreDTO;
 import by.itacademy.servletproject.core.dto.VoteCreateDTO;
-import by.itacademy.servletproject.daO.api.IVoteDao;
 import by.itacademy.servletproject.service.api.IArtistService;
 import by.itacademy.servletproject.service.api.IGenreService;
-import by.itacademy.servletproject.service.api.IVoteService;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class VoteService implements IVoteService {

@@ -1,10 +1,6 @@
 package by.itacademy.servletproject.daO.memory.factory;
 
-import by.itacademy.servletproject.core.dto.VoteCreateDTO;
-import by.itacademy.servletproject.daO.api.IArtistDao;
-import by.itacademy.servletproject.daO.api.IVoteDao;
 import by.itacademy.servletproject.daO.memory.ArtistMemoryDao;
-import by.itacademy.servletproject.daO.memory.VoteMemoryDao;
 
 public class VoteDaoFactory {
 

@@ -1,11 +1,7 @@
 package by.itacademy.servletproject.service.factory;
 
-import by.itacademy.servletproject.daO.memory.factory.GenreDaoFactory;
 import by.itacademy.servletproject.daO.memory.factory.VoteDaoFactory;
-import by.itacademy.servletproject.service.GenreService;
 import by.itacademy.servletproject.service.VoteService;
-import by.itacademy.servletproject.service.api.IGenreService;
-import by.itacademy.servletproject.service.api.IVoteService;
 
 public class VoteServiceFactory {
 
