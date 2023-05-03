@@ -95,6 +95,7 @@ public class FormServlet extends HttpServlet {
 
         Map<String, String[]> parameterMap = req.getParameterMap();
 
+
         PrintWriter writer = resp.getWriter();
 
         String[] artistsRaw = parameterMap.get(ARTIST_PARAM_NAME);
