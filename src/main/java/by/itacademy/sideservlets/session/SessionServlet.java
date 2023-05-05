@@ -21,6 +21,7 @@ public class SessionServlet extends HttpServlet {
 
         PrintWriter writer = resp.getWriter();
 
+
         if (parameterMap.containsKey("firstName") && parameterMap.containsKey("lastName")) {
 
             String firstName = parameterMap.get("firstName")[0];
