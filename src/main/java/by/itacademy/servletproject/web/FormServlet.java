@@ -44,8 +44,8 @@ public class FormServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html; charset=UTF-8");
+//        req.setCharacterEncoding("UTF-8");
+//        resp.setContentType("text/html; charset=UTF-8");
 
         PrintWriter writer = resp.getWriter();
 
@@ -83,8 +83,8 @@ public class FormServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req,
                           HttpServletResponse resp)
             throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html; charset=UTF-8");
+//        req.setCharacterEncoding("UTF-8");
+//        resp.setContentType("text/html; charset=UTF-8");
 
         Map<String, String[]> parameterMap = req.getParameterMap();
 
