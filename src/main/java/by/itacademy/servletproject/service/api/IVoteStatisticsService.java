@@ -2,9 +2,10 @@ package by.itacademy.servletproject.service.api;
 
 import by.itacademy.servletproject.core.dto.StatisticDTO;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
-public interface IVoteStatistics {
+public interface IVoteStatisticsService {
 
 
     StatisticDTO getTop();
@@ -12,6 +13,8 @@ public interface IVoteStatistics {
     Map<String, Integer> getGenreTop();
 
     Map<String, Integer> getArtistTop();
+
+    Map<LocalDateTime, String> getAboutTop();
 
 
 
