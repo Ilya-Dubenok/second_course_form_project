@@ -11,6 +11,7 @@ import by.itacademy.servletproject.service.factory.ArtistServiceFactory;
 import by.itacademy.servletproject.service.factory.GenreServiceFactory;
 import by.itacademy.servletproject.service.factory.VoteServiceFactory;
 import by.itacademy.servletproject.service.factory.VoteStatisticsServiceFactory;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,8 +23,10 @@ import by.itacademy.servletproject.core.dto.GenreDTO;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,37 +58,13 @@ public class FormServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/voteform.jsp");
+        req.setAttribute("artistList",artistService.get());
 
-        PrintWriter writer = resp.getWriter();
+        req.setAttribute("genreList",genreService.get());
 
-        writer.write("<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "\t<head>\n" +
-                "\t\t<meta charset=\"utf-8\">\n" +
-                "\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
-                "\t\t<title>Голосование</title>\n" +
-                "\t</head>\n" +
-                "\t<body>\n" +
-                "\t\t<form action=\"formserv\" method=\"POST\">\n" +
-                "\t\t\t<label> Выберите артиста\n");
-        List<ArtistDTO> artists = artistService.get();
-        for (ArtistDTO artist : artists) {
-            writer.write("\t\t\t\t<p><input type=\"radio\" name=\"" + ARTIST_PARAM_NAME + "\" value=\"" + artist.getId() + "\"> " + artist.getName() + "</p>\n");
-        }
-        writer.write("\t\t\t</label>\n" +
-                "\t\t\t<label> Выберите жанр\n");
-        List<GenreDTO> genres = genreService.get();
-        for (GenreDTO genre : genres) {
-            writer.write("\t\t\t\t<p><input type=\"checkbox\" name=\"" + GENRE_PARAM_NAME + "\" value=\"" + genre.getId() + "\"> " + genre.getName() + "</p>\n");
-        }
-        writer.write("\t\t\t</label>\n" +
-                "\t\t\t<label>Информация\n" +
-                "\t\t\t\t<textarea name=\"" + ABOUT_PARAM_NAME + "\"></textarea>\n" +
-                "\t\t\t</label>\n" +
-                "\t\t\t<p><input type=\"submit\" value=\"Отправить\"></p>\n" +
-                "\t\t</form>\n" +
-                "\t</body>\n" +
-                "</html>");
+        dispatcher.forward(req,resp);
+
     }
 
     @Override
@@ -142,7 +121,13 @@ public class FormServlet extends HttpServlet {
         VoteCreateDTO dto = new VoteCreateDTO(artist, genres, about);
         voteService.save(dto);
 
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/resultform.jsp");
         StatisticDTO resultVote = voteStatisticsService.getTop();
+        req.setAttribute("artistMap",resultVote.getArtistTop());
+        req.setAttribute("genreMap",resultVote.getGenreTop());
+        req.setAttribute("aboutMap", getFormattedTimeMap(resultVote.getAboutTop()));
+        dispatcher.forward(req, resp);
+
         resultVote.getArtistTop().forEach(
                 (K,V)-> writer.write("</br>"+ K + " -> " + V)
         );
@@ -160,6 +145,17 @@ public class FormServlet extends HttpServlet {
                         writer.write("</br>"+V + " -> " + K.format(formatter))
         );
 
+    }
+
+
+    private Map<String, String> getFormattedTimeMap(Map<LocalDateTime, String> map) {
+        Map<String, String> res = new LinkedHashMap<>();
+        map.forEach((key1, value) -> {
+            String key = key1.format(formatter);
+            res.put(key, value);
+
+        });
+        return res;
     }
 }
 
