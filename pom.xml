@@ -40,6 +40,24 @@
             <version>2.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>5.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>6.0.8</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -57,7 +75,7 @@
                 <configuration>
                     <webResources>
                         <resource>
-                            <directory>${basedir}/src/main/webapp</directory>
+                            <directory>${basedir}/src/main/webapp/</directory>
                         </resource>
                     </webResources>
                     <webXml>${basedir}/src/main/webapp/WEB-INF/web.xml</webXml>

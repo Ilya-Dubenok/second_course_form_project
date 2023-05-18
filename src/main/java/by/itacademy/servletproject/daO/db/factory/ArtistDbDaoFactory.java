@@ -1,21 +1,22 @@
-package by.itacademy.servletproject.daO.memory.factory;
+package by.itacademy.servletproject.daO.db.factory;
 
 import by.itacademy.servletproject.daO.api.IArtistDao;
+import by.itacademy.servletproject.daO.db.ArtistDbDao;
 import by.itacademy.servletproject.daO.memory.ArtistMemoryDao;
 
-public class ArtistDaoFactory {
+public class ArtistDbDaoFactory {
 
     private static volatile IArtistDao instance;
 
-    private ArtistDaoFactory(){};
-
+    private ArtistDbDaoFactory() {
+    }
 
     public static IArtistDao getInstance() {
         if (instance == null) {
-            synchronized (ArtistMemoryDao.class) {
+            synchronized (ArtistDbDao.class) {
                 if (instance == null) {
 
-                    instance = new ArtistMemoryDao();
+                    instance = new ArtistDbDao();
                 }
             }
         }

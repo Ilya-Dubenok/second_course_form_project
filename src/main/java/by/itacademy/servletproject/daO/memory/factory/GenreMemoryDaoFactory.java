@@ -1,21 +1,20 @@
 package by.itacademy.servletproject.daO.memory.factory;
 
 import by.itacademy.servletproject.daO.api.IGenreDao;
-import by.itacademy.servletproject.daO.memory.ArtistMemoryDao;
 import by.itacademy.servletproject.daO.memory.GenreMemoryDao;
 
-public class GenreDaoFactory {
+public class GenreMemoryDaoFactory {
 
     private static volatile IGenreDao instance;
 
-    private GenreDaoFactory() {
+    private GenreMemoryDaoFactory() {
 
     }
 
 
     public static IGenreDao getInstance() {
         if (instance == null) {
-            synchronized (GenreDaoFactory.class) {
+            synchronized (GenreMemoryDaoFactory.class) {
                 if (instance == null) {
 
                     instance = new GenreMemoryDao();

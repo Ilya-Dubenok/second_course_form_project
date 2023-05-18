@@ -31,15 +31,17 @@ public class GenreService implements IGenreService {
 
     @Override
     public GenreDTO save(GenreCreateDTO item) {
-        int id = this.get().stream().mapToInt(GenreDTO::getId)
-                .max().orElseThrow();
 
-        GenreDTO dto = new GenreDTO();
-        dto.setName(item.getName());
-        dto.setId(id + 1);
-
-
-        return genreDao.save(dto);
+        return genreDao.save(new GenreDTO(0, item.getName()));
+//        int id = this.get().stream().mapToInt(GenreDTO::getId)
+//                .max().orElseThrow();
+//
+//        GenreDTO dto = new GenreDTO();
+//        dto.setName(item.getName());
+//        dto.setId(id + 1);
+//
+//
+//        return genreDao.save(dto);
     }
 
 

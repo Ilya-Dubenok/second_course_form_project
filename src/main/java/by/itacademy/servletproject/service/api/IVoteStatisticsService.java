@@ -1,5 +1,7 @@
 package by.itacademy.servletproject.service.api;
 
+import by.itacademy.servletproject.core.dto.ArtistDTO;
+import by.itacademy.servletproject.core.dto.GenreDTO;
 import by.itacademy.servletproject.core.dto.StatisticDTO;
 
 import java.time.LocalDateTime;
@@ -10,9 +12,9 @@ public interface IVoteStatisticsService {
 
     StatisticDTO getTop();
 
-    Map<String, Integer> getGenreTop();
+    Map<GenreDTO, Integer> getGenreTop();
 
-    Map<String, Integer> getArtistTop();
+    Map<ArtistDTO, Integer> getArtistTop();
 
     Map<LocalDateTime, String> getAboutTop();
 

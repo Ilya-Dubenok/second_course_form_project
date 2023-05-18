@@ -1,5 +1,7 @@
 package by.itacademy.servletproject.core.dto;
 
+import java.util.Objects;
+
 public class ArtistDTO implements IDTO{
 
 
@@ -29,5 +31,18 @@ public class ArtistDTO implements IDTO{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArtistDTO artistDTO = (ArtistDTO) o;
+        return id == artistDTO.id && Objects.equals(name, artistDTO.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 }

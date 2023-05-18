@@ -1,24 +1,21 @@
 package by.itacademy.servletproject.daO.memory.factory;
 
-import by.itacademy.servletproject.core.dto.VoteCreateDTO;
 import by.itacademy.servletproject.daO.api.IArtistDao;
-import by.itacademy.servletproject.daO.api.IVoteDao;
 import by.itacademy.servletproject.daO.memory.ArtistMemoryDao;
-import by.itacademy.servletproject.daO.memory.VoteMemoryDao;
 
-public class VoteDaoFactory {
+public class ArtistMemoryDaoFactory {
 
-    private static volatile IVoteDao instance;
+    private static volatile IArtistDao instance;
 
-    private VoteDaoFactory(){};
+    private ArtistMemoryDaoFactory(){};
 
 
-    public static IVoteDao getInstance() {
+    public static IArtistDao getInstance() {
         if (instance == null) {
             synchronized (ArtistMemoryDao.class) {
                 if (instance == null) {
 
-                    instance = new VoteMemoryDao();
+                    instance = new ArtistMemoryDao();
                 }
             }
         }

@@ -28,15 +28,15 @@ public class VoteStatisticsService implements IVoteStatisticsService {
 
     @Override
     public StatisticDTO getTop() {
-        Map<String, Integer> genreTop = getGenreTop();
-        Map<String, Integer> artistTop = getArtistTop();
+        Map<GenreDTO, Integer> genreTop = getGenreTop();
+        Map<ArtistDTO, Integer> artistTop = getArtistTop();
         Map<LocalDateTime, String> aboutTop = getAboutTop();
         StatisticDTO dto = new StatisticDTO(genreTop, artistTop, aboutTop);
         return dto;
     }
 
     @Override
-    public Map<String, Integer> getGenreTop() {
+    public Map<GenreDTO, Integer> getGenreTop() {
         List<VoteDTO> voteDTOS = voteService.get();
 
         List<GenreDTO> genreDTOList = genreService.get();
@@ -48,10 +48,10 @@ public class VoteStatisticsService implements IVoteStatisticsService {
         );
 
 
-        Map<String, Integer> res = new LinkedHashMap<>();
+        Map<GenreDTO, Integer> res = new LinkedHashMap<>();
         collect1.entrySet().stream().sorted(((o1, o2) -> o2.getValue().compareTo(o1.getValue())))
                 .forEach(x -> res.put(
-                        x.getKey().getName(), x.getValue())
+                        x.getKey(), x.getValue())
                 );
 
 
@@ -60,7 +60,7 @@ public class VoteStatisticsService implements IVoteStatisticsService {
     }
 
     @Override
-    public Map<String, Integer> getArtistTop() {
+    public Map<ArtistDTO, Integer> getArtistTop() {
         List<VoteDTO> voteDTOS = voteService.get();
         List<ArtistDTO> artistDTOS = artistService.get();
         Map<ArtistDTO, Integer> collect1 = artistDTOS.stream().collect(Collectors.toMap(
@@ -68,14 +68,18 @@ public class VoteStatisticsService implements IVoteStatisticsService {
         ));
 
         voteDTOS.stream().map(VoteDTO::getArtist).forEach(
-                x -> collect1.computeIfPresent(artistService.get(x), (K, V) -> V + 1)
+                x ->
+                        collect1.computeIfPresent(artistService.get(x),
+                                (K, V)
+                                        ->
+                                        V + 1)
         );
 
 
-        Map<String, Integer> res = new LinkedHashMap<>();
+        Map<ArtistDTO, Integer> res = new LinkedHashMap<>();
         collect1.entrySet().stream().sorted(((o1, o2) -> o2.getValue().compareTo(o1.getValue())))
                 .forEach(x -> res.put(
-                        x.getKey().getName(), x.getValue())
+                        x.getKey(), x.getValue())
                 );
 
 

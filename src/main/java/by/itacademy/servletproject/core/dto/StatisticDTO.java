@@ -6,23 +6,23 @@ import java.util.Map;
 public class StatisticDTO {
 
 
-    private Map<String, Integer> genreTop;
+    private Map<GenreDTO, Integer> genreTop;
 
-    private Map<String, Integer> artistTop;
+    private Map<ArtistDTO, Integer> artistTop;
 
     private Map<LocalDateTime, String> aboutTop;
 
-    public StatisticDTO(Map<String, Integer> genreTop, Map<String, Integer> artistTop, Map<LocalDateTime, String> aboutTop) {
+    public StatisticDTO(Map<GenreDTO, Integer> genreTop, Map<ArtistDTO, Integer> artistTop, Map<LocalDateTime, String> aboutTop) {
         this.genreTop = genreTop;
         this.artistTop = artistTop;
         this.aboutTop = aboutTop;
     }
 
-    public Map<String, Integer> getGenreTop() {
+    public Map<GenreDTO, Integer> getGenreTop() {
         return genreTop;
     }
 
-    public Map<String, Integer> getArtistTop() {
+    public Map<ArtistDTO, Integer> getArtistTop() {
         return artistTop;
     }
 

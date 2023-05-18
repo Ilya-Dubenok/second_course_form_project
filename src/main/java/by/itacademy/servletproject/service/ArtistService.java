@@ -25,19 +25,27 @@ public class ArtistService implements IArtistService {
         return artistDao.get(id);
     }
 
+    public ArtistDTO save(ArtistCreateDTO artistCreateDTO) {
 
 
-    @Override
-    public ArtistDTO save(ArtistCreateDTO item) {
-        int id = this.get().stream().mapToInt(ArtistDTO::getId)
-                .max().orElseThrow();
-
-        ArtistDTO dto = new ArtistDTO();
-        dto.setName(item.getName());
-        dto.setId(id + 1);
-
-        return artistDao.save(dto);
+        return artistDao.save(
+                new ArtistDTO(0, artistCreateDTO.getName())
+        );
     }
+
+
+
+//    @Override
+//    public ArtistDTO save(ArtistCreateDTO item) {
+//        int id = this.get().stream().mapToInt(ArtistDTO::getId)
+//                .max().orElseThrow();
+//
+//        ArtistDTO dto = new ArtistDTO();
+//        dto.setName(item.getName());
+//        dto.setId(id + 1);
+//
+//        return artistDao.save(dto);
+//    }
 
 
 }

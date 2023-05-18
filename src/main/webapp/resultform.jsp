@@ -9,7 +9,7 @@
 <body>
     <c:forEach var="entry" items="${artistMap}">
 
-        <c:out value="${entry.key} -> " />
+        <c:out value="${entry.key.name} -> " />
 
             <c:out value="${entry.value}" />
         </br>
@@ -20,7 +20,7 @@
 
 <c:forEach var="entry" items="${genreMap}">
 
-    <c:out value="${entry.key} -> " />
+    <c:out value="${entry.key.name} -> " />
 
         <c:out value="${entry.value}" />
     </br>
