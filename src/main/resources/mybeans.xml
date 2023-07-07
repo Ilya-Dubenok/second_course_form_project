@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+
+    <context:property-placeholder location="classpath:dat.properties"/>
+
+    <bean id="ArtistDbDao" class="by.itacademy.servletproject.daO.db.ArtistDbDao">
+        <constructor-arg ref="HikaryDataSource"/>
+    </bean>
+
+    <bean id="GenreDbDao" class="by.itacademy.servletproject.daO.db.GenreDbDao">
+        <constructor-arg ref="HikaryDataSource"/>
+    </bean>
+
+    <bean id="HikaryDataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <constructor-arg>
+            <bean id="anonymous" class="com.zaxxer.hikari.HikariConfig">
+                <constructor-arg>
+                    <props>
+                        <prop key="jdbcUrl">${jdbcUrl}</prop>
+                        <prop key="dataSource.user">${dataSource.user}</prop>
+                    </props>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+
+    <bean id="VoteMemoryDao" class="by.itacademy.servletproject.daO.memory.VoteMemoryDao"/>
+
+    <bean id="ArtistService" class="by.itacademy.servletproject.service.ArtistService">
+        <constructor-arg ref="ArtistDbDao"/>
+    </bean>
+
+    <bean id="GenreService" class="by.itacademy.servletproject.service.GenreService">
+        <constructor-arg ref="GenreDbDao"/>
+    </bean>
+
+
+    <bean id="VoteService" class="by.itacademy.servletproject.service.VoteService">
+        <constructor-arg ref="ArtistService"/>
+        <constructor-arg ref="GenreService"/>
+        <constructor-arg ref="VoteMemoryDao"/>
+    </bean>
+
+    <bean id="VoteStatisticsService" class="by.itacademy.servletproject.service.VoteStatisticsService">
+        <constructor-arg ref="ArtistService"/>
+        <constructor-arg ref="GenreService"/>
+        <constructor-arg ref="VoteService"/>
+    </bean>
+
+
+</beans>

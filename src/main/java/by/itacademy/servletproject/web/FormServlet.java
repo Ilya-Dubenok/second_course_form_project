@@ -1,5 +1,6 @@
 package by.itacademy.servletproject.web;
 
+import by.itacademy.servletproject.core.BeansFactory;
 import by.itacademy.servletproject.core.dto.StatisticDTO;
 import by.itacademy.servletproject.core.dto.VoteCreateDTO;
 
@@ -7,18 +8,12 @@ import by.itacademy.servletproject.service.api.IArtistService;
 import by.itacademy.servletproject.service.api.IGenreService;
 import by.itacademy.servletproject.service.api.IVoteService;
 import by.itacademy.servletproject.service.api.IVoteStatisticsService;
-import by.itacademy.servletproject.service.factory.ArtistServiceFactory;
-import by.itacademy.servletproject.service.factory.GenreServiceFactory;
-import by.itacademy.servletproject.service.factory.VoteServiceFactory;
-import by.itacademy.servletproject.service.factory.VoteStatisticsServiceFactory;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import by.itacademy.servletproject.core.dto.ArtistDTO;
-import by.itacademy.servletproject.core.dto.GenreDTO;
 
 
 import java.io.IOException;
@@ -48,10 +43,11 @@ public class FormServlet extends HttpServlet {
 
 
     public FormServlet() {
-        this.artistService = ArtistServiceFactory.getInstance();
-        this.genreService = GenreServiceFactory.getInstance();
-        this.voteService = VoteServiceFactory.getInstance();
-        this.voteStatisticsService = VoteStatisticsServiceFactory.getInstance();
+        this.artistService = BeansFactory.getInstance().getBeanInstance(IArtistService.class);
+        this.genreService = BeansFactory.getInstance().getBeanInstance(IGenreService.class);
+        this.voteService = BeansFactory.getInstance().getBeanInstance(IVoteService.class);
+        this.voteStatisticsService = BeansFactory.getInstance().getBeanInstance(IVoteStatisticsService.class);
+
     }
 
     @Override

@@ -2,16 +2,18 @@ package by.itacademy.servletproject.daO.db;
 
 import by.itacademy.servletproject.core.dto.ArtistDTO;
 import by.itacademy.servletproject.daO.api.IArtistDao;
-import by.itacademy.servletproject.utils.db.DataSourceConnector;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 
+import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArtistDbDao implements IArtistDao {
+
+    private final JdbcTemplate template;
 
     private final List<String> DEFAULT_ARTISTS_LIST = new ArrayList<>(
             List.of(
@@ -24,12 +26,9 @@ public class ArtistDbDao implements IArtistDao {
             )
     );
 
-    private final JdbcTemplate template =
-            new JdbcTemplate(
-                    DataSourceConnector.getInstance().getDataSource()
-            );
 
-    public ArtistDbDao() {
+    public ArtistDbDao(DataSource dataSource) {
+        this.template = new JdbcTemplate(dataSource);
         if (tableIsEmpty()) {
             formDefaultValues();
         }

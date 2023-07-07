@@ -5,7 +5,6 @@ import by.itacademy.servletproject.service.api.IArtistService;
 import by.itacademy.servletproject.service.api.IGenreService;
 import by.itacademy.servletproject.service.api.IVoteService;
 import by.itacademy.servletproject.service.api.IVoteStatisticsService;
-import by.itacademy.servletproject.service.factory.GenreServiceFactory;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;

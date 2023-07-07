@@ -1,15 +1,9 @@
 package by.itacademy.servletproject.web;
 
+import by.itacademy.servletproject.core.BeansFactory;
 import by.itacademy.servletproject.core.dto.ArtistCreateDTO;
 import by.itacademy.servletproject.core.dto.ArtistDTO;
-import by.itacademy.servletproject.core.dto.GenreCreateDTO;
-import by.itacademy.servletproject.core.dto.GenreDTO;
-import by.itacademy.servletproject.daO.memory.ArtistMemoryDao;
-import by.itacademy.servletproject.daO.memory.GenreMemoryDao;
-import by.itacademy.servletproject.service.ArtistService;
-import by.itacademy.servletproject.service.GenreService;
 import by.itacademy.servletproject.service.api.IArtistService;
-import by.itacademy.servletproject.service.factory.ArtistServiceFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,7 +21,8 @@ public class ArtistServlet extends HttpServlet {
     private final IArtistService artistService;
 
     public ArtistServlet() {
-        this.artistService = ArtistServiceFactory.getInstance();
+        this.artistService = BeansFactory.getInstance().
+                getBeanInstance(IArtistService.class);
     }
 
     @Override

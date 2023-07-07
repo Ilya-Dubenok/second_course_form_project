@@ -1,11 +1,9 @@
 package by.itacademy.servletproject.web;
 
+import by.itacademy.servletproject.core.BeansFactory;
 import by.itacademy.servletproject.core.dto.GenreCreateDTO;
 import by.itacademy.servletproject.core.dto.GenreDTO;
-import by.itacademy.servletproject.daO.memory.GenreMemoryDao;
-import by.itacademy.servletproject.service.GenreService;
 import by.itacademy.servletproject.service.api.IGenreService;
-import by.itacademy.servletproject.service.factory.GenreServiceFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,7 +20,7 @@ public class GenreServlet extends HttpServlet {
     private final IGenreService genreService;
 
     public GenreServlet() {
-        this.genreService = GenreServiceFactory.getInstance();
+        this.genreService = BeansFactory.getInstance().getBeanInstance(IGenreService.class);
     }
 
     @Override

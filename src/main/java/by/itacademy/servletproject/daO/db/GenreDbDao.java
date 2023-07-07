@@ -2,10 +2,10 @@ package by.itacademy.servletproject.daO.db;
 
 import by.itacademy.servletproject.core.dto.GenreDTO;
 import by.itacademy.servletproject.daO.api.IGenreDao;
-import by.itacademy.servletproject.utils.db.DataSourceConnector;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 
+import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,10 +13,7 @@ import java.util.List;
 
 public class GenreDbDao implements IGenreDao {
 
-    private final JdbcTemplate template =
-            new JdbcTemplate(
-                    DataSourceConnector.getInstance().getDataSource()
-            );
+    private final JdbcTemplate template;
 
     private final List<String> DEFAULT_GENRES_LIST = new ArrayList<>(
             List.of(
@@ -29,7 +26,8 @@ public class GenreDbDao implements IGenreDao {
     );
 
 
-    public GenreDbDao() {
+    public GenreDbDao(DataSource dataSource) {
+        this.template = new JdbcTemplate(dataSource);
         if (tableIsEmpty()) {
             formDefaultValues();
         }
